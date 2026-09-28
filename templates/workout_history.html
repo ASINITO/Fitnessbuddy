@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Workout Plan History - FitBuddy{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+  <div class="border-b border-slate-800 pb-4 flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-extrabold text-white">Workout Plan Archives</h1>
+      <p class="text-xs sm:text-sm text-slate-400 mt-1">Every generated routine and feedback adaptation is preserved here.</p>
+    </div>
+    <a href="/" class="px-3 py-2 text-xs font-semibold bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl transition-colors">
+      + New Plan
+    </a>
+  </div>
+
+  <div id="history_list" class="space-y-4">
+    <!-- Populated by JavaScript from /api/workout/history -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-3">
+      <div class="flex items-center justify-between text-xs text-slate-400">
+        <span class="font-mono text-emerald-400">Plan #1 · Primary Goal: Lose belly fat & gain muscle</span>
+        <span>Generated Recently</span>
+      </div>
+      <div class="p-4 bg-slate-950/70 border border-slate-800 rounded-xl text-xs font-mono text-slate-300 max-h-40 overflow-y-auto whitespace-pre-wrap">
+7-Day Split: Upper Body Push & Pull, Lower Body Foundations, Active Recovery, Functional Cardio & Core, Full Body Hypertrophy, Posterior Chain, Rest.
+      </div>
+      <div class="pt-2 text-xs text-slate-400 flex items-center justify-between">
+        <span class="text-emerald-400">Status: Active Plan</span>
+        <a href="/result" class="hover:underline text-slate-200">Open in Result View →</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

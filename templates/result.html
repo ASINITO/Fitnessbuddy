@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Your Personalized Workout Plan - FitBuddy{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8">
+
+  <!-- Success Notification Banner from Screenshot -->
+  {% if feedback_success %}
+  <div class="p-4 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-400 text-sm font-semibold flex items-center gap-2.5 shadow-lg shadow-emerald-500/10">
+    <span class="text-lg">✅</span>
+    <span>Your plan has been updated based on your feedback!</span>
+  </div>
+  {% endif %}
+
+  <!-- Main Plan Banner from Screenshot -->
+  <div class="text-center space-y-2 py-4">
+    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white flex items-center justify-center gap-3">
+      <span>🏋️</span> Your Personalized Workout Plan
+    </h1>
+    <h2 class="text-lg sm:text-xl font-bold text-slate-300">
+      User Information
+    </h2>
+  </div>
+
+  <!-- User Information Card from Screenshot -->
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-sm">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-400">Name:</span>
+        <span class="text-white font-medium">{{ username }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-400">User ID:</span>
+        <span class="text-white font-mono font-medium">{{ user_id }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-400">Age:</span>
+        <span class="text-white font-medium">{{ age }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-400">Weight:</span>
+        <span class="text-white font-medium">{{ weight }} kg</span>
+      </div>
+      <div class="sm:col-span-2 flex items-start gap-2">
+        <span class="font-bold text-slate-400 shrink-0">Goal:</span>
+        <span class="text-emerald-400 font-medium">{{ goal }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-400">Intensity:</span>
+        <span class="text-white font-medium">{{ intensity }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nutrition Tip Card -->
+  {% if nutrition_tip %}
+  <div class="bg-emerald-950/30 border border-emerald-800/40 rounded-2xl p-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-emerald-400 mb-2 flex items-center gap-2">
+      <span>🥗</span> AI Nutrition & Recovery Guidance
+    </h3>
+    <p class="text-slate-200 text-sm leading-relaxed">{{ nutrition_tip }}</p>
+  </div>
+  {% endif %}
+
+  <!-- Workout Plan Section -->
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <span>📋</span> 7-Day Workout Routine
+      </h3>
+      <button onclick="window.print()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700">
+        🖨️ Print / Save PDF
+      </button>
+    </div>
+
+    <div id="formatted_plan_container" class="space-y-4">
+      <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-6 text-sm text-slate-200 leading-relaxed font-sans space-y-4">
+        <div id="dynamic_plan_view" class="space-y-4">
+          <!-- Rendered dynamically or clean formatted output -->
+          <div class="whitespace-pre-wrap font-sans text-sm sm:text-base leading-relaxed text-slate-200">
+{{ workout_plan }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Your Feedback Section from Screenshot -->
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+    <div class="border-b border-slate-800 pb-4">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <span>📝</span> Share Your Feedback
+      </h3>
+      <p class="text-xs text-slate-400 mt-1">
+        Need adjustments? Tell Gemini what to modify (e.g. "make it easier", "add more cardio", "I only have 30 minutes"). FitBuddy will adapt your routine while preserving the core structure.
+      </p>
+    </div>
+
+    <form action="/submit-feedback-form" method="POST" class="space-y-4">
+      <div>
+        <label for="feedback_user_id" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+          Your Unique User ID:
+        </label>
+        <input type="number" id="feedback_user_id" name="user_id" required value="{{ user_id }}"
+          placeholder="Enter the same User ID used to generate your plan"
+          class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-mono">
+      </div>
+
+      <div>
+        <label for="feedback" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+          Your Feedback:
+        </label>
+        <textarea id="feedback" name="feedback" rows="4" required
+          placeholder="Let us know how we can improve your plan..."
+          class="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"></textarea>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        <button type="button" onclick="setFeedbackText('Make the workouts easier with longer rest periods.')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition-colors">"Make workouts easier"</button>
+        <button type="button" onclick="setFeedbackText('Add more cardio and core exercises.')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition-colors">"Add more cardio"</button>
+        <button type="button" onclick="setFeedbackText('I only have 30 minutes per day.')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition-colors">"30 minutes limit"</button>
+        <button type="button" onclick="setFeedbackText('Remove high jumping movements due to sensitive knees.')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition-colors">"No jumping movements"</button>
+      </div>
+
+      <button type="submit"
+        class="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]">
+        Submit Feedback
+      </button>
+    </form>
+  </div>
+
+  <div class="text-center pt-2">
+    <a href="/view-all-users" class="text-xs font-medium text-emerald-400 hover:underline">
+      View All Users & Plans Table →
+    </a>
+  </div>
+
+</div>
+
+<script>
+function setFeedbackText(text) {
+  document.getElementById('feedback').value = text;
+}
+</script>
+{% endblock %}

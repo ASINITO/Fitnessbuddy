@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}FitBuddy - AI Workout & Nutrition Generator{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8">
+  <!-- Hero Section -->
+  <div class="text-center space-y-3">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-orange-500/15 via-amber-500/15 to-rose-500/15 border border-orange-500/30 text-orange-300 text-xs font-mono font-medium">
+      <span>✨ Powered by Google Gemini AI</span>
+    </div>
+    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+      Personalized AI Fitness & Wellness Engine
+    </h1>
+    <p class="text-slate-400 text-base max-w-2xl mx-auto">
+      Enter your profile details below. FitBuddy will synthesize a custom 7-day workout plan, progressive exercise metrics, and targeted nutrition advice.
+    </p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl shadow-black/40 backdrop-blur-sm">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+      <h2 class="text-lg font-bold text-white flex items-center gap-2">
+        <span class="text-orange-400">📝</span> Generate Your Custom Workout Plan
+      </h2>
+      <button type="button" onclick="autoFillDemo()" class="text-xs text-orange-400 hover:text-orange-300 font-medium underline">
+        Auto-fill Demo Data
+      </button>
+    </div>
+
+    <form action="/submit-plan-form" method="POST" class="space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        
+        <!-- User ID -->
+        <div>
+          <label for="user_id" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            User ID (Integer) *
+          </label>
+          <input type="number" id="user_id" name="user_id" required value="10"
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors font-mono">
+          <p class="text-[11px] text-slate-500 mt-1">Unique numeric identifier for tracking your plan adaptations.</p>
+        </div>
+
+        <!-- Name -->
+        <div>
+          <label for="username" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            Full Name / Username *
+          </label>
+          <input type="text" id="username" name="username" required value="xyz" placeholder="e.g. Alex Carter"
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+        </div>
+
+        <!-- Age -->
+        <div>
+          <label for="age" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            Age (Years) *
+          </label>
+          <input type="number" id="age" name="age" required value="20" min="12" max="100"
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors font-mono">
+        </div>
+
+        <!-- Weight -->
+        <div>
+          <label for="weight" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            Weight (kg) *
+          </label>
+          <input type="number" step="0.1" id="weight" name="weight" required value="70.0" min="20" max="350"
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors font-mono">
+        </div>
+
+        <!-- Fitness Goal -->
+        <div class="sm:col-span-2">
+          <label for="goal" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            Fitness Goal *
+          </label>
+          <input type="text" id="goal" name="goal" required value="i want to lose belly fat and gain muscles" placeholder="e.g. Build upper body strength, marathon prep, tone core..."
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+          <div class="flex flex-wrap gap-2 mt-2">
+            <button type="button" onclick="setGoal('i want to lose belly fat and gain muscles')" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-md transition-colors">Lose belly fat & gain muscle</button>
+            <button type="button" onclick="setGoal('Muscle building & hypertrophy')" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-md transition-colors">Muscle building</button>
+            <button type="button" onclick="setGoal('Endurance & cardiovascular fitness')" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-md transition-colors">Endurance & Cardio</button>
+            <button type="button" onclick="setGoal('General wellness & mobility')" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-md transition-colors">General wellness</button>
+          </div>
+        </div>
+
+        <!-- Workout Intensity -->
+        <div class="sm:col-span-2">
+          <label for="intensity" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            Preferred Workout Intensity *
+          </label>
+          <select id="intensity" name="intensity" required
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
+            <option value="Low">Low - Gentle, low-impact pacing</option>
+            <option value="Medium">Medium - Balanced strength & active recovery</option>
+            <option value="High" selected>High - Rigorous, high energy & challenging volume</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <span class="text-xs text-slate-500 flex items-center gap-1.5">
+          🔒 Secure SQLite storage · Adapts with feedback
+        </span>
+        <button type="submit"
+          class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-600 hover:via-orange-600 hover:to-rose-600 text-slate-950 font-black text-sm rounded-xl shadow-lg shadow-orange-500/25 transition-all hover:scale-[1.02] active:scale-[0.98]">
+          🚀 Generate 7-Day Plan with Gemini
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function autoFillDemo() {
+  document.getElementById('user_id').value = '10';
+  document.getElementById('username').value = 'xyz';
+  document.getElementById('age').value = '20';
+  document.getElementById('weight').value = '70.0';
+  document.getElementById('goal').value = 'i want to lose belly fat and gain muscles';
+  document.getElementById('intensity').value = 'High';
+}
+function setGoal(val) {
+  document.getElementById('goal').value = val;
+}
+</script>
+{% endblock %}

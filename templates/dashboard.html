@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - FitBuddy AI{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+  <!-- Welcome Banner -->
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-800/40 rounded-2xl p-6">
+    <div>
+      <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Welcome Back</span>
+      <h1 class="text-2xl sm:text-3xl font-black text-white mt-1">Ready to crush today's fitness goals?</h1>
+      <p class="text-xs sm:text-sm text-slate-400 mt-1">Goal: <span class="text-emerald-300 font-medium">Lose belly fat & gain muscle</span> · Intensity: <span class="text-slate-200">High</span></p>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="/" class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs rounded-xl shadow-lg shadow-emerald-500/20 transition-all">
+        + New AI Plan
+      </a>
+      <a href="/chatbot" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-xl border border-slate-700 transition-all">
+        Ask AI Coach
+      </a>
+    </div>
+  </div>
+
+  <!-- Key Metrics Row (Zero-pill, high typographic clarity) -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <!-- BMI -->
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+      <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">BMI Score</span>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="text-2xl font-black text-white font-mono" id="dash_bmi">22.9</span>
+        <span class="text-xs text-emerald-400 font-medium">Normal</span>
+      </div>
+      <p class="text-[11px] text-slate-500 mt-1">Height: 175cm · Weight: 70kg</p>
+    </div>
+
+    <!-- Streak -->
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+      <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Workout Streak</span>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="text-2xl font-black text-amber-400 font-mono">5 Days</span>
+        <span class="text-xs text-amber-300">🔥 On fire</span>
+      </div>
+      <p class="text-[11px] text-slate-500 mt-1">Longest: 7 Days</p>
+    </div>
+
+    <!-- Hydration -->
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+      <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Water Intake</span>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="text-2xl font-black text-sky-400 font-mono" id="dash_water">1,750</span>
+        <span class="text-xs text-slate-400 font-mono">/ 2,500 ml</span>
+      </div>
+      <div class="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+        <div class="bg-sky-400 h-full rounded-full" style="width: 70%"></div>
+      </div>
+    </div>
+
+    <!-- Sleep -->
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+      <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">Sleep Duration</span>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="text-2xl font-black text-indigo-400 font-mono">7.8 hrs</span>
+        <span class="text-xs text-indigo-300">Deep</span>
+      </div>
+      <p class="text-[11px] text-slate-500 mt-1">Quality: Restorative (92%)</p>
+    </div>
+  </div>
+
+  <!-- Today's Workout & AI Recommendation Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Today's Workout Card -->
+    <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-mono uppercase text-emerald-400">Day 1 Routine</span>
+          <h2 class="text-lg font-bold text-white">Upper Body Push & Pull Hypertrophy</h2>
+        </div>
+        <button onclick="markCompleted(1)" id="btn_complete_1" class="text-xs font-semibold px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-lg transition-colors flex items-center gap-1.5">
+          <span>✓</span> Mark as Completed
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="p-3 bg-slate-950/70 border border-slate-800 rounded-xl flex items-center justify-between">
+          <div>
+            <h4 class="text-sm font-semibold text-white">1. Incline / Standard Push-Ups</h4>
+            <p class="text-xs text-slate-400">Target: Chest & Triceps · Keep elbows at 45°</p>
+          </div>
+          <span class="text-xs font-mono text-emerald-400">3 Sets × 12 Reps</span>
+        </div>
+
+        <div class="p-3 bg-slate-950/70 border border-slate-800 rounded-xl flex items-center justify-between">
+          <div>
+            <h4 class="text-sm font-semibold text-white">2. Dumbbell Bent-Over Rows</h4>
+            <p class="text-xs text-slate-400">Target: Latissimus Dorsi & Rhomboids</p>
+          </div>
+          <span class="text-xs font-mono text-emerald-400">3 Sets × 12 Reps</span>
+        </div>
+
+        <div class="p-3 bg-slate-950/70 border border-slate-800 rounded-xl flex items-center justify-between">
+          <div>
+            <h4 class="text-sm font-semibold text-white">3. Overhead Shoulder Press</h4>
+            <p class="text-xs text-slate-400">Target: Deltoids & Core Stabilization</p>
+          </div>
+          <span class="text-xs font-mono text-emerald-400">3 Sets × 10 Reps</span>
+        </div>
+
+        <div class="p-3 bg-slate-950/70 border border-slate-800 rounded-xl flex items-center justify-between">
+          <div>
+            <h4 class="text-sm font-semibold text-white">4. Forearm Plank with Taps</h4>
+            <p class="text-xs text-slate-400">Target: Anterior Core & Scapular Stability</p>
+          </div>
+          <span class="text-xs font-mono text-emerald-400">3 Sets × 45 Sec</span>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-between text-xs text-slate-400">
+        <span>⏱️ Estimated: 45 Mins</span>
+        <span>🔥 Est. Burn: 320 kcal</span>
+        <a href="/workout" class="text-emerald-400 hover:underline">View 7-Day Plan →</a>
+      </div>
+    </div>
+
+    <!-- AI Wellness Recommendation & Daily Checkin -->
+    <div class="space-y-6">
+      <div class="bg-gradient-to-b from-emerald-950/40 to-slate-900 border border-emerald-800/40 rounded-2xl p-6 space-y-3">
+        <div class="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+          <span>🧠</span> AI Smart Recommendation
+        </div>
+        <p class="text-slate-200 text-xs sm:text-sm leading-relaxed" id="dash_rec_text">
+          "Based on your recent 5-day streak and moderate energy check-in, focus on controlled eccentric tempo today rather than maximal weight. Hydrate with an extra 500ml water post-workout to enhance muscle recovery."
+        </p>
+        <div class="text-[11px] text-slate-500 font-mono">Synthesized via Gemini 3.8 Flash</div>
+      </div>
+
+      <!-- Quick Action: Log Water -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+          <span>💧 Quick Hydration</span>
+          <span class="text-sky-400 font-mono">+250ml / click</span>
+        </h3>
+        <div class="flex gap-2">
+          <button onclick="addWater(250)" class="flex-1 py-2 bg-sky-950 hover:bg-sky-900 border border-sky-800/60 text-sky-300 font-medium text-xs rounded-xl transition-colors">
+            +1 Glass (250ml)
+          </button>
+          <button onclick="addWater(500)" class="flex-1 py-2 bg-sky-950 hover:bg-sky-900 border border-sky-800/60 text-sky-300 font-medium text-xs rounded-xl transition-colors">
+            +1 Bottle (500ml)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekly Progress Chart -->
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-slate-300">
+        📈 Weekly Fitness & Activity Progression
+      </h3>
+      <div class="flex items-center gap-4 text-xs font-mono text-slate-400">
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Workouts</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span> Water (L)</span>
+      </div>
+    </div>
+    <div class="h-64 w-full">
+      <canvas id="weeklyProgressChart"></canvas>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function markCompleted(day) {
+  fetch('/api/workout/complete?user_id=10&day_number=' + day, { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      const btn = document.getElementById('btn_complete_' + day);
+      btn.innerText = 'Completed! 🎉';
+      btn.classList.remove('bg-emerald-500', 'text-slate-950');
+      btn.classList.add('bg-slate-800', 'text-emerald-400', 'border', 'border-emerald-500/50');
+    });
+}
+
+function addWater(amount) {
+  fetch('/api/water?user_id=10', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ glasses: 1, amount_ml: amount })
+  })
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('dash_water').innerText = Math.round(data.today_total_ml).toLocaleString();
+  });
+}
+
+// Chart.js render
+const ctx = document.getElementById('weeklyProgressChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      {
+        label: 'Workout Minutes',
+        data: [45, 50, 0, 45, 60, 30, 0],
+        backgroundColor: '#10b981',
+        borderRadius: 6
+      },
+      {
+        label: 'Water Intake (dl)',
+        data: [25, 27, 22, 28, 30, 25, 24],
+        backgroundColor: '#38bdf8',
+        borderRadius: 6
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+      y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+    }
+  }
+});
+</script>
+{% endblock %}

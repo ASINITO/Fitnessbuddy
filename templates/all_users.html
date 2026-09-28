@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}All Users & Workout Plans - FitBuddy Admin{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2">
+        <span>👥</span> All Users & Workout Plans
+      </h1>
+      <p class="text-xs text-slate-400 mt-1">Admin database view of generated plans, user metrics, and AI adaptations.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="/" class="text-xs font-semibold px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-lg transition-colors">
+        + Generate New Plan
+      </a>
+      <a href="/admin/dashboard" class="text-xs font-semibold px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors">
+        Analytics Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Users Table Container -->
+  <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/90 shadow-xl">
+    <table class="w-full text-left text-sm text-slate-300">
+      <thead class="bg-slate-950/80 text-xs uppercase tracking-wider text-slate-400 border-b border-slate-800">
+        <tr>
+          <th scope="col" class="px-4 py-3.5 font-bold">ID</th>
+          <th scope="col" class="px-4 py-3.5 font-bold">Name</th>
+          <th scope="col" class="px-4 py-3.5 font-bold">Age</th>
+          <th scope="col" class="px-4 py-3.5 font-bold">Weight</th>
+          <th scope="col" class="px-4 py-3.5 font-bold">Goal</th>
+          <th scope="col" class="px-4 py-3.5 font-bold">Intensity</th>
+          <th scope="col" class="px-6 py-3.5 font-bold min-w-[280px]">Original Plan</th>
+          <th scope="col" class="px-6 py-3.5 font-bold min-w-[280px]">Updated Plan</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-800/80">
+        {% for user in users %}
+        <tr class="hover:bg-slate-800/40 transition-colors">
+          <td class="px-4 py-4 font-mono font-semibold text-emerald-400">{{ user.id }}</td>
+          <td class="px-4 py-4 font-medium text-white">{{ user.name }}</td>
+          <td class="px-4 py-4">{{ user.age }}</td>
+          <td class="px-4 py-4 font-mono">{{ user.weight }} kg</td>
+          <td class="px-4 py-4 text-xs font-medium text-slate-200">{{ user.goal }}</td>
+          <td class="px-4 py-4">
+            <span class="inline-block px-2.5 py-0.5 rounded text-xs font-mono font-medium {% if user.intensity == 'High' %}bg-rose-950 text-rose-300 border border-rose-800/60{% elif user.intensity == 'Medium' %}bg-amber-950 text-amber-300 border border-amber-800/60{% else %}bg-sky-950 text-sky-300 border border-sky-800/60{% endif %}">
+              {{ user.intensity }}
+            </span>
+          </td>
+          <td class="px-6 py-4">
+            <div class="max-h-48 overflow-y-auto bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-[11px] font-mono leading-relaxed text-slate-300">
+              <pre class="whitespace-pre-wrap font-mono">{{ user.original_plan }}</pre>
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            <div class="max-h-48 overflow-y-auto bg-slate-950/70 p-3 rounded-xl border border-slate-800 text-[11px] font-mono leading-relaxed text-slate-300">
+              <pre class="whitespace-pre-wrap font-mono">{{ user.updated_plan }}</pre>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="8" class="text-center py-8 text-slate-500 text-sm">
+            No users recorded yet. <a href="/" class="text-emerald-400 underline">Generate a workout plan</a> to seed the first entry!
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

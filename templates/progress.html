@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Progress & Health Metrics - FitBuddy{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-8">
+  <div class="border-b border-slate-800 pb-4">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono mb-2">
+      <span>📊 Biometrics & Analytics</span>
+    </div>
+    <h1 class="text-3xl font-extrabold text-white">Fitness Progress & Calculations</h1>
+    <p class="text-xs sm:text-sm text-slate-400 mt-1">
+      Scientifically grounded formulas: BMI classification and Mifflin-St Jeor Total Daily Energy Expenditure (TDEE).
+    </p>
+  </div>
+
+  <!-- Interactive Calculators Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- 7. BMI Calculator -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>⚖️</span> BMI Calculator
+        </h3>
+        <span class="text-[11px] font-mono text-emerald-400">GET /api/bmi</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Height (cm)</label>
+          <input type="number" id="calc_height" value="175" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Weight (kg)</label>
+          <input type="number" id="calc_weight" value="70" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+        </div>
+      </div>
+
+      <button onclick="calculateLiveBMI()" class="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs rounded-xl transition-all">
+        Calculate BMI
+      </button>
+
+      <div id="bmi_result_box" class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 text-xs space-y-1">
+        <div class="flex items-baseline justify-between">
+          <span class="text-slate-400">Calculated Score:</span>
+          <span class="text-xl font-black font-mono text-emerald-400" id="bmi_val">22.9</span>
+        </div>
+        <div class="flex items-baseline justify-between">
+          <span class="text-slate-400">Category:</span>
+          <span class="font-semibold text-white" id="bmi_cat">Normal weight</span>
+        </div>
+        <p class="text-[10px] text-slate-500 pt-2 border-t border-slate-800/60 leading-tight">
+          BMI is a screening tool, not a diagnostic test for body fat percentage or cardiovascular health.
+        </p>
+      </div>
+    </div>
+
+    <!-- 8. Calorie Estimator (Mifflin-St Jeor) -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>🔥</span> Calorie & TDEE Estimator
+        </h3>
+        <span class="text-[11px] font-mono text-emerald-400">Mifflin-St Jeor</span>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 text-xs">
+        <div>
+          <label class="block text-slate-400 mb-1">Age</label>
+          <input type="number" id="cal_age" value="25" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-1.5 text-white font-mono">
+        </div>
+        <div>
+          <label class="block text-slate-400 mb-1">Gender</label>
+          <select id="cal_gender" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2 py-1.5 text-white">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-slate-400 mb-1">Activity</label>
+          <select id="cal_activity" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-2 py-1.5 text-white">
+            <option value="Low">Sedentary</option>
+            <option value="Medium" selected>Moderate</option>
+            <option value="High">Active</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="calculateLiveCalories()" class="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs rounded-xl transition-all">
+        Calculate Caloric Targets
+      </button>
+
+      <div id="cal_result_box" class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 text-xs space-y-1">
+        <div class="flex items-baseline justify-between">
+          <span class="text-slate-400">Basal Metabolic Rate (BMR):</span>
+          <span class="font-mono text-white font-bold" id="res_bmr">1,680 kcal</span>
+        </div>
+        <div class="flex items-baseline justify-between">
+          <span class="text-slate-400">Total Expenditure (TDEE):</span>
+          <span class="font-mono text-white font-bold" id="res_tdee">2,604 kcal</span>
+        </div>
+        <div class="flex items-baseline justify-between pt-1 border-t border-slate-800">
+          <span class="text-emerald-400 font-semibold">Recommended Daily Target:</span>
+          <span class="text-base font-black font-mono text-emerald-400" id="res_target">2,154 kcal</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Weight Progression Chart -->
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div>
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>📉</span> Bodyweight Progression Trend
+        </h3>
+        <p class="text-xs text-slate-400">Historical weigh-ins and goal convergence</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <input type="number" step="0.1" id="new_log_weight" placeholder="Weight (kg)" class="w-28 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white">
+        <button onclick="logNewWeight()" class="px-3 py-1 bg-emerald-500 text-slate-950 font-bold text-xs rounded-lg hover:bg-emerald-600">Log</button>
+      </div>
+    </div>
+    <div class="h-64 w-full">
+      <canvas id="weightProgressChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function calculateLiveBMI() {
+  const h = document.getElementById('calc_height').value;
+  const w = document.getElementById('calc_weight').value;
+  fetch(`/api/bmi?height=${h}&weight=${w}`)
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById('bmi_val').innerText = d.bmi;
+      document.getElementById('bmi_cat').innerText = d.category;
+    });
+}
+
+function calculateLiveCalories() {
+  const h = document.getElementById('calc_height').value;
+  const w = document.getElementById('calc_weight').value;
+  const a = document.getElementById('cal_age').value;
+  const g = document.getElementById('cal_gender').value;
+  const act = document.getElementById('cal_activity').value;
+
+  fetch(`/api/calorie-estimate?weight=${w}&height=${h}&age=${a}&gender=${g}&activity_level=${act}&goal=Fat%20loss`)
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById('res_bmr').innerText = d.bmr + ' kcal';
+      document.getElementById('res_tdee').innerText = d.tdee + ' kcal';
+      document.getElementById('res_target').innerText = d.target_calories + ' kcal';
+    });
+}
+
+function logNewWeight() {
+  const w = document.getElementById('new_log_weight').value;
+  if (!w) return;
+  fetch(`/api/progress?weight=${w}&user_id=10`, { method: 'POST' })
+    .then(r => r.json())
+    .then(() => {
+      alert('Weight recorded!');
+      window.location.reload();
+    });
+}
+
+// Chart.js render for weight progression
+const wCtx = document.getElementById('weightProgressChart').getContext('2d');
+new Chart(wCtx, {
+  type: 'line',
+  data: {
+    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Current'],
+    datasets: [{
+      label: 'Weight (kg)',
+      data: [73.5, 72.8, 72.1, 71.4, 70.9, 70.4, 70.0],
+      borderColor: '#10b981',
+      backgroundColor: 'rgba(16, 185, 129, 0.1)',
+      tension: 0.3,
+      fill: true,
+      pointRadius: 5,
+      pointBackgroundColor: '#10b981'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+      y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+    }
+  }
+});
+</script>
+{% endblock %}

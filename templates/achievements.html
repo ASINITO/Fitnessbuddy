@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Achievements & Badges - FitBuddy{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-8">
+  <div class="border-b border-slate-800 pb-4">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono mb-2">
+      <span>🏆 Gamified Milestones</span>
+    </div>
+    <h1 class="text-3xl font-extrabold text-white">Fitness Badges & Trophies</h1>
+    <p class="text-xs sm:text-sm text-slate-400 mt-1">
+      Milestones are automatically awarded as you complete workouts, sustain streaks, and log hydration and sleep.
+    </p>
+  </div>
+
+  <!-- Achievements Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- First Workout -->
+    <div class="bg-slate-900 border border-emerald-500/40 rounded-2xl p-6 relative overflow-hidden shadow-lg shadow-emerald-500/5">
+      <div class="flex items-start justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-bold">
+          ⚡
+        </div>
+        <span class="text-[11px] font-mono font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-800/60">
+          UNLOCKED
+        </span>
+      </div>
+      <h3 class="text-base font-bold text-white mt-4">First Workout</h3>
+      <p class="text-xs text-slate-400 mt-1">Took the initial leap and logged your very first training session in FitBuddy.</p>
+    </div>
+
+    <!-- 3-Day Streak -->
+    <div class="bg-slate-900 border border-emerald-500/40 rounded-2xl p-6 relative overflow-hidden shadow-lg shadow-emerald-500/5">
+      <div class="flex items-start justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-bold">
+          🔥
+        </div>
+        <span class="text-[11px] font-mono font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-800/60">
+          UNLOCKED
+        </span>
+      </div>
+      <h3 class="text-base font-bold text-white mt-4">3-Day Streak</h3>
+      <p class="text-xs text-slate-400 mt-1">Maintained consistent physical activity for 3 consecutive days without missing a beat.</p>
+    </div>
+
+    <!-- Hydration Hero -->
+    <div class="bg-slate-900 border border-emerald-500/40 rounded-2xl p-6 relative overflow-hidden shadow-lg shadow-emerald-500/5">
+      <div class="flex items-start justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-2xl font-bold">
+          💧
+        </div>
+        <span class="text-[11px] font-mono font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-800/60">
+          UNLOCKED
+        </span>
+      </div>
+      <h3 class="text-base font-bold text-white mt-4">Hydration Hero</h3>
+      <p class="text-xs text-slate-400 mt-1">Met your 2.5L daily hydration target across at least 5 tracked days.</p>
+    </div>
+
+    <!-- 7-Day Streak -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative opacity-85">
+      <div class="flex items-start justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center text-2xl font-bold">
+          🎯
+        </div>
+        <span class="text-[11px] font-mono text-slate-500 bg-slate-950 px-2.5 py-0.5 rounded-full border border-slate-800">
+          5/7 DAYS
+        </span>
+      </div>
+      <h3 class="text-base font-bold text-slate-200 mt-4">7-Day Streak</h3>
+      <p class="text-xs text-slate-400 mt-1">One full week of discipline and momentum. Almost there!</p>
+    </div>
+
+    <!-- Workout Warrior -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative opacity-85">
+      <div class="flex items-start justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center text-2xl font-bold">
+          ⚔️
+        </div>
+        <span class="text-[11px] font-mono text-slate-500 bg-slate-950 px-2.5 py-0.5 rounded-full border border-slate-800">
+          LOCKED
+        </span>
+      </div>
+      <h3 class="text-base font-bold text-slate-200 mt-4">Workout Warrior</h3>
+      <p class="text-xs text-slate-400 mt-1">Log 10 complete workout sessions inside the platform.</p>
+    </div>
+
+    <!-- Consistency Champion -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative opacity-85">
+      <div class="flex items-start justify-between">
+        <div class="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center text-2xl font-bold">
+          👑
+        </div>
+        <span class="text-[11px] font-mono text-slate-500 bg-slate-950 px-2.5 py-0.5 rounded-full border border-slate-800">
+          LOCKED
+        </span>
+      </div>
+      <h3 class="text-base font-bold text-slate-200 mt-4">Consistency Champion</h3>
+      <p class="text-xs text-slate-400 mt-1">Log 25 workouts. Reserved for true champions of habit and fitness dedication.</p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

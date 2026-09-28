@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Error - FitBuddy{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto my-16 text-center space-y-4">
+  <div class="w-16 h-16 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-3xl font-bold mx-auto">
+    ⚠️
+  </div>
+  <h1 class="text-2xl font-black text-white">Something Went Wrong</h1>
+  <p class="text-xs text-slate-400 leading-relaxed">
+    {{ error_message or "An unexpected issue occurred while processing your request. Please verify your inputs and try again." }}
+  </p>
+  <div class="pt-4">
+    <a href="/" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs rounded-xl transition-all inline-block">
+      Return to Home
+    </a>
+  </div>
+</div>
+{% endblock %}

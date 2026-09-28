@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Register - FitBuddy{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto my-8 bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl space-y-6">
+  <div class="text-center space-y-2">
+    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-2xl mx-auto">⚡</div>
+    <h1 class="text-2xl font-black text-white">Create Your FitBuddy Account</h1>
+    <p class="text-xs text-slate-400">Join our AI-powered personalized fitness platform</p>
+  </div>
+
+  <form id="reg_form" onsubmit="handleRegister(event)" class="space-y-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Full Name *</label>
+        <input type="text" id="reg_name" required value="Alex Carter" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Username *</label>
+        <input type="text" id="reg_username" required value="alex_fit" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Email Address *</label>
+        <input type="email" id="reg_email" required value="alex@example.com" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Password *</label>
+        <input type="password" id="reg_password" required value="strongpassword123" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Fitness Level</label>
+        <select id="reg_level" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white">
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate" selected>Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Primary Goal</label>
+        <select id="reg_goal" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white">
+          <option value="Weight management">Weight management</option>
+          <option value="Muscle building">Muscle building</option>
+          <option value="Endurance">Endurance</option>
+          <option value="General wellness" selected>General wellness</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit"
+      class="w-full py-3.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg shadow-emerald-500/20 mt-4">
+      Create Account
+    </button>
+  </form>
+
+  <div class="pt-4 border-t border-slate-800 text-center text-xs text-slate-400">
+    Already registered? <a href="/login" class="text-emerald-400 font-semibold hover:underline">Sign In</a>
+  </div>
+</div>
+
+<script>
+function handleRegister(e) {
+  e.preventDefault();
+  const payload = {
+    name: document.getElementById('reg_name').value,
+    username: document.getElementById('reg_username').value,
+    email: document.getElementById('reg_email').value,
+    password: document.getElementById('reg_password').value,
+    fitness_level: document.getElementById('reg_level').value,
+    goal: document.getElementById('reg_goal').value
+  };
+
+  fetch('/api/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.user_id) {
+      alert('Registration successful! Redirecting to login...');
+      window.location.href = '/login';
+    } else {
+      alert(d.detail || 'Registration failed');
+    }
+  })
+  .catch(() => {
+    window.location.href = '/login';
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}AI Fitness Coach - FitBuddy{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+  <!-- Header with Language Selector -->
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono mb-1">
+        <span>🤖 Multilingual FitBuddy AI</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Ask FitBuddy AI Coach</h1>
+      <p class="text-xs text-slate-400">Ask about workouts, form checks, recovery, or meals. Supports English and Tamil (தமிழ்).</p>
+    </div>
+
+    <!-- Language Selector from Requirement 25 -->
+    <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 p-1.5 rounded-xl">
+      <span class="text-xs text-slate-400 px-2">Language:</span>
+      <button onclick="setChatLang('en')" id="lang_en_btn" class="px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500 text-slate-950 transition-colors">
+        English
+      </button>
+      <button onclick="setChatLang('ta')" id="lang_ta_btn" class="px-3 py-1 text-xs font-semibold rounded-lg text-slate-300 hover:text-white transition-colors">
+        தமிழ் (Tamil)
+      </button>
+    </div>
+  </div>
+
+  <!-- Chat Log Box -->
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col h-[500px]">
+    <div id="chat_messages" class="flex-1 overflow-y-auto space-y-4 pr-2">
+      <!-- Initial AI Message -->
+      <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+          ⚡
+        </div>
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl rounded-tl-none p-4 text-xs sm:text-sm text-slate-200 max-w-[85%] leading-relaxed">
+          Hello! I am FitBuddy, your personalized AI fitness and wellness coach. Ask me anything about your routine, safe exercise execution, recovery strategies, or post-workout meals.
+          <br><br>
+          <span class="text-slate-400 text-[11px]">நீங்கள் தமிழிலும் உரையாடலாம் ("உடற்பயிற்சி முறைகளை விளக்குங்கள்").</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Prompts Row -->
+    <div class="py-3 border-t border-slate-800 flex items-center gap-2 overflow-x-auto text-xs">
+      <span class="text-slate-500 shrink-0">Suggestions:</span>
+      <button onclick="sendQuickPrompt('Explain how to perform squats safely.')" class="shrink-0 bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1 rounded-lg transition-colors">
+        Explain squats safely
+      </button>
+      <button onclick="sendQuickPrompt('Suggest a healthy post-workout meal for muscle recovery.')" class="shrink-0 bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1 rounded-lg transition-colors">
+        Post-workout meal
+      </button>
+      <button onclick="sendQuickPrompt('Give me a 5-minute dynamic warm-up routine.')" class="shrink-0 bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1 rounded-lg transition-colors">
+        5-min warm-up
+      </button>
+      <button onclick="sendQuickPrompt('உடல் எடையை குறைக்க சிறந்த உடற்பயிற்சிகள் எவை?')" class="shrink-0 bg-slate-800 hover:bg-slate-700 text-emerald-400 px-3 py-1 rounded-lg transition-colors">
+        எடை குறைக்க (Tamil)
+      </button>
+    </div>
+
+    <!-- Input Form -->
+    <form id="chat_form" onsubmit="handleChatSubmit(event)" class="flex gap-2">
+      <input type="text" id="chat_input" required placeholder="Type your fitness question here..."
+        class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+      <button type="submit" id="chat_send_btn"
+        class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg shadow-emerald-500/20 shrink-0">
+        Send
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+let currentLang = 'en';
+
+function setChatLang(lang) {
+  currentLang = lang;
+  const enBtn = document.getElementById('lang_en_btn');
+  const taBtn = document.getElementById('lang_ta_btn');
+  if (lang === 'ta') {
+    taBtn.className = 'px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500 text-slate-950 transition-colors';
+    enBtn.className = 'px-3 py-1 text-xs font-semibold rounded-lg text-slate-300 hover:text-white transition-colors';
+    document.getElementById('chat_input').placeholder = 'தமிழில் உங்கள் கேள்வியை தட்டச்சு செய்யவும்...';
+  } else {
+    enBtn.className = 'px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-500 text-slate-950 transition-colors';
+    taBtn.className = 'px-3 py-1 text-xs font-semibold rounded-lg text-slate-300 hover:text-white transition-colors';
+    document.getElementById('chat_input').placeholder = 'Type your fitness question here...';
+  }
+}
+
+function sendQuickPrompt(text) {
+  document.getElementById('chat_input').value = text;
+  document.getElementById('chat_form').dispatchEvent(new Event('submit'));
+}
+
+function handleChatSubmit(e) {
+  e.preventDefault();
+  const input = document.getElementById('chat_input');
+  const message = input.value.trim();
+  if (!message) return;
+  input.value = '';
+
+  const messagesBox = document.getElementById('chat_messages');
+
+  // Append user bubble
+  const userDiv = document.createElement('div');
+  userDiv.className = 'flex items-start justify-end gap-3';
+  userDiv.innerHTML = `
+    <div class="bg-emerald-600 text-white rounded-2xl rounded-tr-none p-4 text-xs sm:text-sm max-w-[85%] leading-relaxed">
+      ${escapeHtml(message)}
+    </div>
+  `;
+  messagesBox.appendChild(userDiv);
+  messagesBox.scrollTop = messagesBox.scrollHeight;
+
+  // Append loading state
+  const loadingDiv = document.createElement('div');
+  loadingDiv.className = 'flex items-start gap-3 temp-loading';
+  loadingDiv.innerHTML = `
+    <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">⚡</div>
+    <div class="bg-slate-950 border border-slate-800 rounded-2xl rounded-tl-none p-4 text-xs text-slate-400">FitBuddy is thinking...</div>
+  `;
+  messagesBox.appendChild(loadingDiv);
+  messagesBox.scrollTop = messagesBox.scrollHeight;
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: message, language: currentLang })
+  })
+  .then(r => r.json())
+  .then(data => {
+    loadingDiv.remove();
+    const aiDiv = document.createElement('div');
+    aiDiv.className = 'flex items-start gap-3';
+    aiDiv.innerHTML = `
+      <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">⚡</div>
+      <div class="bg-slate-950 border border-slate-800 rounded-2xl rounded-tl-none p-4 text-xs sm:text-sm text-slate-200 max-w-[85%] leading-relaxed whitespace-pre-wrap">
+        ${escapeHtml(data.reply)}
+      </div>
+    `;
+    messagesBox.appendChild(aiDiv);
+    messagesBox.scrollTop = messagesBox.scrollHeight;
+  })
+  .catch(() => {
+    loadingDiv.remove();
+  });
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.innerText = text;
+  return div.innerHTML;
+}
+</script>
+{% endblock %}

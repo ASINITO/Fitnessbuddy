@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Nutrition & Meal Plans - FitBuddy AI{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-8">
+  <div class="border-b border-slate-800 pb-4">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono mb-2">
+      <span>🥗 Gemini Nutritionist</span>
+    </div>
+    <h1 class="text-3xl font-extrabold text-white">AI Nutrition & Meal Guidance</h1>
+    <p class="text-xs sm:text-sm text-slate-400 mt-1">
+      Tailored nutritional architectures for Vegetarian, Non-vegetarian, Vegan, and Eggetarian dietary protocols.
+    </p>
+  </div>
+
+  <!-- Interactive Meal Generator Controls -->
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Primary Goal</label>
+        <select id="nutri_goal" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500">
+          <option value="Fat loss & lean muscle tone" selected>Fat Loss & Lean Muscle Tone</option>
+          <option value="Muscle building & hypertrophy">Muscle Building & Hypertrophy</option>
+          <option value="Endurance & stamina">Endurance & Stamina</option>
+          <option value="General wellness & longevity">General Wellness & Longevity</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Dietary Protocol</label>
+        <select id="nutri_diet" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500">
+          <option value="Vegetarian" selected>Vegetarian (Dairy & Plant-Based)</option>
+          <option value="Non-vegetarian">Non-Vegetarian (Poultry, Fish, Eggs)</option>
+          <option value="Vegan">100% Vegan (Plant-Only)</option>
+          <option value="Eggetarian">Eggetarian (Vegetarian + Eggs)</option>
+        </select>
+      </div>
+
+      <div class="flex items-end">
+        <button onclick="generateCustomMealPlan()" id="btn_generate_meal" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg shadow-emerald-500/20">
+          ⚡ Generate Meal Plan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Nutrition Tip Banner -->
+  <div id="tip_container" class="bg-emerald-950/30 border border-emerald-800/40 rounded-2xl p-6">
+    <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2 flex items-center gap-2">
+      <span>💡</span> Targeted Nutrition Tip
+    </h3>
+    <p id="tip_text" class="text-slate-200 text-sm leading-relaxed">
+      "Aim for 1.6 to 2.2 grams of protein per kilogram of body weight. Space protein consumption across 3–4 meals to maximize muscle protein synthesis and promote feeling full throughout your deficit."
+    </p>
+  </div>
+
+  <!-- Sample Daily Meal Schedule -->
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <span>🍽️</span> Daily Meal Blueprint
+      </h3>
+      <span class="text-xs font-mono text-emerald-400">Target: ~1,980 kcal · 115g Protein</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Breakfast -->
+      <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span class="font-bold text-emerald-400 uppercase">Breakfast (08:00)</span>
+          <span class="font-mono">~420 kcal · 22g Protein</span>
+        </div>
+        <h4 id="meal_b_name" class="text-sm font-semibold text-white">Power Oatmeal Bowl with Berries & Seeds</h4>
+        <p id="meal_b_desc" class="text-xs text-slate-400 mt-1">Rolled oats cooked with almond milk, chia seeds, sliced bananas, and a scoop of plant/whey protein.</p>
+      </div>
+
+      <!-- Mid-Morning -->
+      <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span class="font-bold text-emerald-400 uppercase">Mid-Morning Snack (11:00)</span>
+          <span class="font-mono">~190 kcal · 6g Protein</span>
+        </div>
+        <h4 id="meal_m_name" class="text-sm font-semibold text-white">Raw Almonds & Crisp Green Apple</h4>
+        <p id="meal_m_desc" class="text-xs text-slate-400 mt-1">Natural fiber and monounsaturated healthy fats to stabilize mid-day insulin levels.</p>
+      </div>
+
+      <!-- Lunch -->
+      <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span class="font-bold text-emerald-400 uppercase">Lunch (13:30)</span>
+          <span class="font-mono">~620 kcal · 38g Protein</span>
+        </div>
+        <h4 id="meal_l_name" class="text-sm font-semibold text-white">Paneer / Tofu Quinoa Harvest Bowl</h4>
+        <p id="meal_l_desc" class="text-xs text-slate-400 mt-1">Sautéed tofu or paneer with steamed broccoli, quinoa, diced cucumbers, and extra virgin olive oil drizzle.</p>
+      </div>
+
+      <!-- Evening Snack -->
+      <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span class="font-bold text-emerald-400 uppercase">Pre-Workout Snack (17:00)</span>
+          <span class="font-mono">~210 kcal · 14g Protein</span>
+        </div>
+        <h4 id="meal_s_name" class="text-sm font-semibold text-white">Spiced Roasted Chickpeas (Sundal / Chana)</h4>
+        <p id="meal_s_desc" class="text-xs text-slate-400 mt-1">Slow-digesting complex carbs and micronutrients for sustained energy during afternoon lifts.</p>
+      </div>
+
+      <!-- Dinner -->
+      <div class="md:col-span-2 bg-slate-950/70 border border-slate-800 rounded-xl p-4">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span class="font-bold text-emerald-400 uppercase">Dinner (20:00)</span>
+          <span class="font-mono">~540 kcal · 32g Protein</span>
+        </div>
+        <h4 id="meal_d_name" class="text-sm font-semibold text-white">Hearty Yellow Lentil Dal with Mixed Vegetables & Brown Rice</h4>
+        <p id="meal_d_desc" class="text-xs text-slate-400 mt-1">Warm, easily digestible evening meal loaded with fiber and zinc for overnight tissue repair.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function generateCustomMealPlan() {
+  const goal = document.getElementById('nutri_goal').value;
+  const diet = document.getElementById('nutri_diet').value;
+  const btn = document.getElementById('btn_generate_meal');
+  btn.innerText = 'Consulting Gemini...';
+
+  fetch('/api/nutrition/meal-plan', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ goal: goal, dietary_preference: diet, fitness_level: 'Intermediate' })
+  })
+  .then(r => r.json())
+  .then(data => {
+    btn.innerText = '⚡ Generate Meal Plan';
+    if (data.tip) document.getElementById('tip_text').innerText = data.tip;
+    if (data.meal_plan) {
+      const p = data.meal_plan;
+      if (p.breakfast) {
+        document.getElementById('meal_b_name').innerText = p.breakfast.name;
+        document.getElementById('meal_b_desc').innerText = p.breakfast.description;
+      }
+      if (p.mid_morning) {
+        document.getElementById('meal_m_name').innerText = p.mid_morning.name;
+        document.getElementById('meal_m_desc').innerText = p.mid_morning.description;
+      }
+      if (p.lunch) {
+        document.getElementById('meal_l_name').innerText = p.lunch.name;
+        document.getElementById('meal_l_desc').innerText = p.lunch.description;
+      }
+      if (p.evening_snack) {
+        document.getElementById('meal_s_name').innerText = p.evening_snack.name;
+        document.getElementById('meal_s_desc').innerText = p.evening_snack.description;
+      }
+      if (p.dinner) {
+        document.getElementById('meal_d_name').innerText = p.dinner.name;
+        document.getElementById('meal_d_desc').innerText = p.dinner.description;
+      }
+    }
+  })
+  .catch(() => {
+    btn.innerText = '⚡ Generate Meal Plan';
+  });
+}
+</script>
+{% endblock %}
