@@ -23,8 +23,26 @@ import {
   Zap,
   Clock,
   ShieldCheck,
-  Check
+  Check,
+  Heart,
+  FileText,
+  LayoutGrid,
+  Copy,
+  Printer,
+  Volume2,
+  VolumeX,
+  Play,
+  Pause,
+  Target,
+  Sliders,
+  Radio,
+  Plus
 } from 'lucide-react';
+import fitnessBgImg from './assets/images/fitness_bg_1790583648894.jpg';
+import { BiomechanicalMuscleHeatmap } from './components/BiomechanicalMuscleHeatmap';
+import { LiveAudioWorkoutCoach } from './components/LiveAudioWorkoutCoach';
+import { AdaptivePlanMutator } from './components/AdaptivePlanMutator';
+import { DynamicMacroCalibrator } from './components/DynamicMacroCalibrator';
 
 // Types
 interface UserRecord {
@@ -47,8 +65,81 @@ interface ChatMessage {
   timestamp: string;
 }
 
+const SCREENSHOT_WORKOUT_PLAN = `## 7-Day High-Intensity Workout Plan for Fat Loss & Muscle Gain
+
+This plan focuses on compound exercises to maximize calorie burn and muscle engagement. Remember to adjust the intensity based on your fitness level and consult a doctor before starting any new workout routine. Proper nutrition is crucial for achieving your goals, so ensure you're supporting your training with a healthy diet.
+
+**Day 1: Upper Body Strength**
+* **Warm-up (5 mins):** Jumping jacks (60 seconds), high knees (30 seconds), arm circles (forward and backward, 30 seconds each), dynamic stretches like arm swings and torso twists (1 min).
+* **Main Workout:**
+  * **Barbell Bench Press:** 3 sets of 8-12 reps
+  * **Pull-ups (or Lat Pulldowns):** 3 sets of 8-12 reps
+  * **Overhead Press:** 3 sets of 8-12 reps
+  * **Barbell Rows:** 3 sets of 8-12 reps
+  * **Dumbbell Bicep Curls:** 3 sets of 10-15 reps
+  * **Dumbbell Triceps Extensions:** 3 sets of 10-15 reps
+* **Cooldown:** Static stretches holding each for 30 seconds (chest, back, biceps, triceps, shoulders).
+
+**Day 2: Lower Body & Core**
+* **Warm-up (5 mins):** Bodyweight squats (15 reps), lunges (10 reps per leg), glute bridges (15 reps), plank (30 seconds).
+* **Main Workout:**
+  * **Barbell Squats:** 3 sets of 8-12 reps
+  * **Romanian Deadlifts:** 3 sets of 10-15 reps
+  * **Walking Lunges:** 3 sets of 12-15 reps per leg
+  * **Glute Bridges:** 3 sets of 15-20 reps
+  * **Hanging Leg Raises:** 3 sets to failure
+  * **Russian Twists:** 3 sets of 15-20 reps per side
+* **Cooldown:** Foam roll quads, hamstrings, and glutes. Static stretches for hip flexors, hamstrings, and glutes (30 seconds each).
+
+**Day 3: HIIT Cardio & Core**
+* **Warm-up (5 mins):** Light cardio, like jogging or jumping jacks, followed by dynamic stretches.
+* **Main Workout:**
+  * **Burpees:** 3 sets of 10-15 reps
+  * **Mountain Climbers:** 3 sets of 30-60 seconds
+  * **Jump Squats:** 3 sets of 10-15 reps
+  * **Kettlebell Swings:** 3 sets of 15-20 reps
+  * **Plank variations (high plank, forearm plank, side plank):** 30-60 seconds each, repeat 2-3 times
+* **Cooldown:** Light cardio cool down (5 mins), static stretches for core and legs.
+
+**Day 4: Rest or Active Recovery**
+* **Active Recovery:** Light activity like walking, swimming, yoga, or foam rolling. Focus on mobility and flexibility. This helps promote blood flow and reduces muscle soreness.
+
+**Day 5: Upper Body Strength (Focus on different exercises)**
+* **Warm-up (5 mins):** Similar to Day 1.
+* **Main Workout:**
+  * **Incline Dumbbell Press:** 3 sets of 8-12 reps
+  * **Chin-ups (or Close-Grip Lat Pulldowns):** 3 sets of 8-12 reps
+  * **Arnold Press:** 3 sets of 8-12 reps
+  * **T-Bar Rows:** 3 sets of 8-12 reps
+  * **Hammer Curls:** 3 sets of 10-15 reps
+  * **Overhead Triceps Extensions:** 3 sets of 10-15 reps
+* **Cooldown:** Similar to Day 1.
+
+**Day 6: Lower Body & Core (Focus on different exercises)**
+* **Warm-up (5 mins):** Similar to Day 2.
+* **Main Workout:**
+  * **Front Squats:** 3 sets of 8-12 reps
+  * **Good Mornings:** 3 sets of 10-15 reps
+  * **Bulgarian Split Squats:** 3 sets of 10-12 reps per leg
+  * **Hip Thrusts:** 3 sets of 15-20 reps
+  * **Cable Crunches:** 3 sets to failure
+  * **Wood Chops (cable machine):** 3 sets of 15-20 reps per side
+* **Cooldown:** Similar to Day 2.
+
+**Day 7: Rest or Active Recovery**
+* **Active Recovery:** Similar to Day 4. Prioritize getting enough sleep this day to prepare for the next week of training.
+
+**Important Notes:**
+* **Progressive Overload:** Gradually increase the weight, reps, or sets each week to challenge your muscles and promote continued growth.
+* **Proper Form:** Focus on maintaining correct form throughout each exercise to prevent injury and maximize results. Watch videos and, if possible, consult with a trainer to ensure proper technique.
+* **Listen to your Body:** Rest when needed and don't push through pain. Adjust the plan as needed based on your recovery and progress.
+* **Nutrition:** Fuel your body with a balanced diet rich in protein, complex carbohydrates, and healthy fats to support muscle growth and recovery.
+* **Hydration:** Drink plenty of water throughout the day, especially before, during, and after workouts.
+
+This plan is a starting point. You can adjust it based on your progress and preferences. Remember consistency and proper execution are key to achieving your fitness goals. Good luck!`;
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'form' | 'result' | 'dashboard' | 'nutrition' | 'progress' | 'exercises' | 'chat' | 'admin' | 'python_code'>('form');
+  const [activeTab, setActiveTab] = useState<'form' | 'result' | 'dashboard' | 'nutrition' | 'progress' | 'exercises' | 'chat' | 'admin' | 'python_code'>('result');
   const [themeColor, setThemeColor] = useState<'orange' | 'cyan' | 'emerald' | 'violet'>('orange');
 
   // Active User & Form State
@@ -63,49 +154,17 @@ export default function App() {
   const [selectedDayView, setSelectedDayView] = useState<'all' | number>('all');
   const [checkedExercises, setCheckedExercises] = useState<Record<string, boolean>>({});
   const [completedRoutineDays, setCompletedRoutineDays] = useState<number[]>([1]);
+  const [planViewMode, setPlanViewMode] = useState<'document' | 'interactive'>('document');
+  const [copiedPlan, setCopiedPlan] = useState<boolean>(false);
 
   // Active Plan State
-  const [activePlan, setActivePlan] = useState<string>(`DAY 1: Upper Body Push & Pull
-• Focus: Chest, Latissimus Dorsi, Anterior Deltoids & Triceps
-• Warm-up: 5–8 mins arm circles, cat-cow stretch, light band pull-aparts
-• Exercises:
-  1. Push-ups (or Incline Push-ups) | Sets: 3 | Reps: 10–12 | Rest: 60 sec | Core tight
-  2. Dumbbell Bent-Over Rows | Sets: 3 | Reps: 12 | Rest: 60 sec | Squeeze shoulder blades
-  3. Overhead Shoulder Press | Sets: 3 | Reps: 10 | Rest: 60 sec | Neutral grip
-  4. Plank to Shoulder Taps | Sets: 3 | Reps: 16 total | Rest: 45 sec | Anti-rotation
-• Cooldown: 5 mins chest door-frame stretch and child's pose
-• Recovery Suggestion: Drink 500ml water with electrolytes and eat 25g protein within 90 minutes.
+  const [activePlan, setActivePlan] = useState<string>(SCREENSHOT_WORKOUT_PLAN);
 
-DAY 2: Lower Body Foundations & Core
-• Focus: Quadriceps, Hamstrings, Glutes & Abs
-• Warm-up: 6 mins leg swings, bodyweight air squats, hip openers
-• Exercises:
-  1. Goblet Squats | Sets: 3 | Reps: 12–15 | Rest: 75 sec | Drive through mid-foot
-  2. Romanian Deadlifts | Sets: 3 | Reps: 10–12 | Rest: 60 sec | Hinge at hips
-  3. Reverse Alternating Lunges | Sets: 3 | Reps: 10 per leg | Rest: 60 sec
-  4. Deadbug Exercise | Sets: 3 | Reps: 12 per side | Rest: 45 sec | Lower back flat
-• Cooldown: 5 mins quad stretch and figure-four stretch
-• Recovery Suggestion: Elevate legs for 5 minutes before bed.
-
-DAY 3: Active Recovery & Mobility Flow
-• Focus: Full Body Flexibility & Joint Decompression
-• Activity: 30 minutes brisk outdoor walk + 10 mins mobility yoga
-
-DAY 4: High-Energy Functional Cardio & Core
-• Focus: Cardiovascular Endurance & Core Strength
-• Exercises: Mountain Climbers (3x30s), Dumbbell Thrusters (3x10), Kettlebell Swings (3x15), Russian Twists (3x20)
-
-DAY 5: Full Body Strength & Hypertrophy
-• Focus: Compound Full Body Movement
-• Exercises: Bulgarian Split Squats (3x10/leg), Bent-Over Rows (3x12), Floor Press (3x10), Bicycle Crunches (3x20)
-
-DAY 6: Core, Balance & Posture Conditioning
-• Focus: Core Stabilization & Postural Muscles
-• Exercises: Forearm Plank (3x45s), Side Planks (2x30s), Glute Bridges with Squeeze (3x15), Farmer's Walks (3x45s)
-
-DAY 7: Complete Rest & Weekly Reflection
-• Focus: Mental and Physical Renewal
-• Recovery Suggestion: Review weekly consistency, hydrate with 2.5L water, and get 8 hours of restorative sleep.`);
+  // Innovative Performance Deck State
+  const [innovativeDeckTab, setInnovativeDeckTab] = useState<'all' | 'heatmap' | 'coach' | 'mutator' | 'blueprint'>('all');
+  const [activeCoachExercise, setActiveCoachExercise] = useState<string>('Barbell Bench Press');
+  const [activeHeatmapDay, setActiveHeatmapDay] = useState<number>(1);
+  const [planAdaptationBadge, setPlanAdaptationBadge] = useState<{ title: string; desc: string } | null>(null);
 
   const [nutritionTip, setNutritionTip] = useState<string>(
     'Focus on high-volume, nutrient-dense foods: load half your plate with fibrous vegetables and lean protein. Drink a glass of water 20 minutes before meals to stay satiated and maintain clean hydration.'
@@ -911,9 +970,41 @@ ${activePlan}
               </h2>
             </div>
 
-            {/* User Information Card matching Screenshot #13 */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-sm">
+            {/* User Information & Live Biometrics Telemetry Card */}
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider">
+                      Biometric Status: Active
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-black text-white mt-0.5">
+                    User Telemetry & Physical Profile
+                  </h3>
+                </div>
+
+                {/* Live Calculated Physical Indexes */}
+                <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+                  <div className="px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-slate-300">
+                    <span className="text-slate-500">BMI: </span>
+                    <strong className="text-white">{(weight / Math.pow(height / 100, 2)).toFixed(1)}</strong>
+                    <span className="text-emerald-400 text-[10px] ml-1">Normal</span>
+                  </div>
+                  <div className="px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-slate-300">
+                    <span className="text-slate-500">BMR: </span>
+                    <strong className="text-orange-400">{Math.round(10 * weight + 6.25 * height - 5 * age + 5)}</strong>
+                    <span className="text-slate-500 text-[10px] ml-1">kcal</span>
+                  </div>
+                  <div className="px-3 py-1 rounded-xl bg-slate-950 border border-slate-800 text-slate-300">
+                    <span className="text-slate-500">CNS State: </span>
+                    <strong className="text-cyan-400">96% Peak</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-6 text-sm">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-400">Name:</span>
                   <span className="text-white font-medium">{username}</span>
@@ -924,22 +1015,157 @@ ${activePlan}
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-400">Age:</span>
-                  <span className="text-white font-medium">{age}</span>
+                  <span className="text-white font-medium">{age} yrs</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-400">Weight:</span>
                   <span className="text-white font-medium">{weight} kg</span>
                 </div>
-                <div className="sm:col-span-2 flex items-start gap-2">
-                  <span className="font-bold text-slate-400 shrink-0">Goal:</span>
-                  <span className="text-emerald-400 font-medium">{goal}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-slate-400">Height:</span>
+                  <span className="text-white font-medium">{height} cm</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-400">Intensity:</span>
-                  <span className="text-white font-medium">{intensity}</span>
+                  <span className="text-amber-400 font-semibold">{intensity}</span>
+                </div>
+                <div className="sm:col-span-2 md:col-span-3 flex items-start gap-2 pt-2 border-t border-slate-800/80">
+                  <span className="font-bold text-slate-400 shrink-0">Goal:</span>
+                  <span className="text-emerald-400 font-medium">{goal}</span>
                 </div>
               </div>
             </div>
+
+            {/* INNOVATIVE PERFORMANCE DECK QUICK-SWITCHER */}
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-2 sm:p-2.5 flex items-center gap-1.5 overflow-x-auto text-xs shadow-lg backdrop-blur-md">
+              <span className="text-[11px] font-mono text-slate-500 font-bold uppercase tracking-wider px-3 hidden sm:inline-block">
+                Innovative Suite:
+              </span>
+              <button
+                type="button"
+                onClick={() => setInnovativeDeckTab('all')}
+                className={`px-3 py-2 rounded-xl font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+                  innovativeDeckTab === 'all'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md shadow-orange-500/20'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <span>🚀 Complete Suite</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInnovativeDeckTab('heatmap')}
+                className={`px-3 py-2 rounded-xl font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+                  innovativeDeckTab === 'heatmap'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md shadow-orange-500/20'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <span>🧬 3D Biomechanics</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInnovativeDeckTab('coach')}
+                className={`px-3 py-2 rounded-xl font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+                  innovativeDeckTab === 'coach'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md shadow-orange-500/20'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <span>🎙️ Live Audio Coach</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInnovativeDeckTab('mutator')}
+                className={`px-3 py-2 rounded-xl font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+                  innovativeDeckTab === 'mutator'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md shadow-orange-500/20'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <span>🎛️ AI Plan Mutator</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInnovativeDeckTab('blueprint')}
+                className={`px-3 py-2 rounded-xl font-bold transition-all shrink-0 flex items-center gap-1.5 ${
+                  innovativeDeckTab === 'blueprint'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md shadow-orange-500/20'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <span>📄 Routine & Macros</span>
+              </button>
+            </div>
+
+            {/* Active Plan Adaptation Alert Banner (if applied) */}
+            {planAdaptationBadge && (
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 via-orange-950/30 to-slate-900 border border-orange-500/40 text-orange-200 text-xs sm:text-sm flex items-start gap-3 shadow-xl">
+                <Sparkles className="w-5 h-5 shrink-0 text-orange-400 mt-0.5" />
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <strong className="text-white font-bold">{planAdaptationBadge.title}</strong>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActivePlan(SCREENSHOT_WORKOUT_PLAN);
+                        setPlanAdaptationBadge(null);
+                      }}
+                      className="text-[11px] font-mono text-amber-400 hover:underline"
+                    >
+                      Restore Original Screenshot Plan
+                    </button>
+                  </div>
+                  <p className="text-slate-300 text-xs mt-1 leading-relaxed">
+                    {planAdaptationBadge.desc}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Dynamic Bio-Nutritional Targets HUD with Logos & Hydration Engine */}
+            {(innovativeDeckTab === 'all' || innovativeDeckTab === 'blueprint') && (
+              <DynamicMacroCalibrator
+                username={username}
+                age={age}
+                weight={weight}
+                height={height}
+                goal={goal}
+                intensity={intensity}
+                waterMl={waterMl}
+                onUpdateWater={(newVal) => setWaterMl(newVal)}
+              />
+            )}
+
+            {/* 3D Biomechanical Muscle Heatmap */}
+            {(innovativeDeckTab === 'all' || innovativeDeckTab === 'heatmap') && (
+              <BiomechanicalMuscleHeatmap
+                currentDay={activeHeatmapDay}
+                onSelectDay={(dayNum) => setActiveHeatmapDay(dayNum)}
+              />
+            )}
+
+            {/* Live Audio Workout Coach & Rest Chronometer */}
+            {(innovativeDeckTab === 'all' || innovativeDeckTab === 'coach') && (
+              <LiveAudioWorkoutCoach
+                currentExerciseName={activeCoachExercise}
+                defaultRestSeconds={60}
+              />
+            )}
+
+            {/* Adaptive Plan Mutator */}
+            {(innovativeDeckTab === 'all' || innovativeDeckTab === 'mutator') && (
+              <AdaptivePlanMutator
+                onMutatePlan={(newPlan, title, desc) => {
+                  setActivePlan(newPlan);
+                  setPlanAdaptationBadge({ title, desc });
+                }}
+                onResetScreenshotPlan={() => {
+                  setActivePlan(SCREENSHOT_WORKOUT_PLAN);
+                  setPlanAdaptationBadge(null);
+                }}
+              />
+            )}
 
             {/* Nutrition Tip Card */}
             {nutritionTip && (
@@ -953,22 +1179,326 @@ ${activePlan}
             )}
 
             {/* Workout Routine Text Box */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Dumbbell className="w-4 h-4 text-emerald-400" />
-                  Generated 7-Day Routine
-                </h3>
-                <button
-                  onClick={() => window.print()}
-                  className="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700"
-                >
-                  Print Routine
-                </button>
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-7 shadow-xl space-y-5">
+              {/* Header with View Mode Switcher and Actions */}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-rose-500 flex items-center justify-center text-slate-950 shadow-md shadow-orange-500/20">
+                    <Dumbbell className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                      7-Day Personalized Training Plan
+                    </h3>
+                    <p className="text-xs text-slate-400">
+                      High-Intensity Fat Loss & Muscle Hypertrophy Program
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* View Mode Toggle */}
+                  <div className="bg-slate-950 p-1 rounded-xl border border-slate-800 flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setPlanViewMode('document')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                        planViewMode === 'document'
+                          ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-bold shadow-md shadow-orange-500/20'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      Document View
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPlanViewMode('interactive')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                        planViewMode === 'interactive'
+                          ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-bold shadow-md shadow-orange-500/20'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <LayoutGrid className="w-3.5 h-3.5" />
+                      Interactive Board
+                    </button>
+                  </div>
+
+                  {/* Reset / Reload Screenshot Routine Button */}
+                  <button
+                    type="button"
+                    onClick={() => setActivePlan(SCREENSHOT_WORKOUT_PLAN)}
+                    className="px-3 py-1.5 text-xs text-amber-300 hover:text-amber-200 bg-amber-950/40 hover:bg-amber-900/50 rounded-xl border border-amber-800/60 font-medium transition-colors"
+                    title="Load 7-Day High-Intensity Plan from Screenshot"
+                  >
+                    📸 Screenshot Plan
+                  </button>
+
+                  {/* Copy Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(activePlan);
+                      setCopiedPlan(true);
+                      setTimeout(() => setCopiedPlan(false), 2000);
+                    }}
+                    className="px-3 py-1.5 text-xs text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-colors flex items-center gap-1.5"
+                  >
+                    {copiedPlan ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedPlan ? 'Copied!' : 'Copy'}
+                  </button>
+
+                  {/* Print Button */}
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="px-3 py-1.5 text-xs text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition-colors flex items-center gap-1.5"
+                  >
+                    <Printer className="w-3.5 h-3.5" />
+                    Print
+                  </button>
+                </div>
               </div>
 
-              {/* Formatted Workout Routine Display (Interactive Gamified Experience) */}
-              <div className="space-y-4">
+              {planViewMode === 'document' ? (
+                <div className="relative rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
+                  {/* Background Athletic Image */}
+                  <div className="absolute inset-0 z-0">
+                    <img
+                      src={fitnessBgImg}
+                      alt="Athletic Gym Environment"
+                      className="w-full h-full object-cover object-center filter brightness-[0.40] saturate-[1.2] scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/70 to-slate-950/90" />
+                  </div>
+
+                  {/* Centered Document Paper Container matching user screenshots */}
+                  <div className="relative z-10 p-4 sm:p-8 lg:p-12 flex justify-center">
+                    <div className="w-full max-w-3xl bg-slate-900/95 sm:bg-slate-900/90 backdrop-blur-md border border-slate-700/60 rounded-2xl shadow-2xl p-6 sm:p-10 space-y-6 text-slate-200">
+                      
+                      {/* Document Header */}
+                      <div className="text-center pb-4 border-b border-slate-800 space-y-1">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20 text-[11px] font-mono">
+                          FitBuddy High-Performance Blueprint
+                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                          Workout Plan
+                        </h2>
+                      </div>
+
+                      {/* Document Body Formatted from Screenshot */}
+                      <div className="space-y-6 text-xs sm:text-sm font-sans leading-relaxed">
+                        
+                        {/* Title & Overview */}
+                        <div className="space-y-2">
+                          <h3 className="text-base sm:text-lg font-black text-white">
+                            ## 7-Day High-Intensity Workout Plan for Fat Loss & Muscle Gain
+                          </h3>
+                          <p className="text-slate-300 leading-relaxed">
+                            This plan focuses on compound exercises to maximize calorie burn and muscle engagement. Remember to adjust the intensity based on your fitness level and consult a doctor before starting any new workout routine. Proper nutrition is crucial for achieving your goals, so ensure you're supporting your training with a healthy diet.
+                          </p>
+                        </div>
+
+                        {/* Days Breakdown */}
+                        <div className="space-y-6 divide-y divide-slate-800/80">
+                          {/* Day 1 */}
+                          <div className="pt-4 first:pt-0 space-y-2">
+                            <h4 className="text-sm sm:text-base font-bold text-amber-300 flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono text-xs">1</span>
+                              **Day 1: Upper Body Strength**
+                            </h4>
+                            <div className="pl-4 sm:pl-8 space-y-1.5 text-slate-300">
+                              <p>
+                                <strong className="text-slate-100">* **Warm-up (5 mins):**</strong> Jumping jacks (60 seconds), high knees (30 seconds), arm circles (forward and backward, 30 seconds each), dynamic stretches like arm swings and torso twists (1 min).
+                              </p>
+                              <div>
+                                <strong className="text-slate-100">* **Main Workout:**</strong>
+                                <ul className="pl-6 space-y-1 mt-1 text-slate-300">
+                                  <li>* <strong className="text-white">**Barbell Bench Press:**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**Pull-ups (or Lat Pulldowns):**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**Overhead Press:**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**Barbell Rows:**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**Dumbbell Bicep Curls:**</strong> 3 sets of 10-15 reps</li>
+                                  <li>* <strong className="text-white">**Dumbbell Triceps Extensions:**</strong> 3 sets of 10-15 reps</li>
+                                </ul>
+                              </div>
+                              <p>
+                                <strong className="text-slate-100">* **Cooldown:**</strong> Static stretches holding each for 30 seconds (chest, back, biceps, triceps, shoulders).
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Day 2 */}
+                          <div className="pt-4 space-y-2">
+                            <h4 className="text-sm sm:text-base font-bold text-amber-300 flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono text-xs">2</span>
+                              **Day 2: Lower Body & Core**
+                            </h4>
+                            <div className="pl-4 sm:pl-8 space-y-1.5 text-slate-300">
+                              <p>
+                                <strong className="text-slate-100">* **Warm-up (5 mins):**</strong> Bodyweight squats (15 reps), lunges (10 reps per leg), glute bridges (15 reps), plank (30 seconds).
+                              </p>
+                              <div>
+                                <strong className="text-slate-100">* **Main Workout:**</strong>
+                                <ul className="pl-6 space-y-1 mt-1 text-slate-300">
+                                  <li>* <strong className="text-white">**Barbell Squats:**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**Romanian Deadlifts:**</strong> 3 sets of 10-15 reps</li>
+                                  <li>* <strong className="text-white">**Walking Lunges:**</strong> 3 sets of 12-15 reps per leg</li>
+                                  <li>* <strong className="text-white">**Glute Bridges:**</strong> 3 sets of 15-20 reps</li>
+                                  <li>* <strong className="text-white">**Hanging Leg Raises:**</strong> 3 sets to failure</li>
+                                  <li>* <strong className="text-white">**Russian Twists:**</strong> 3 sets of 15-20 reps per side</li>
+                                </ul>
+                              </div>
+                              <p>
+                                <strong className="text-slate-100">* **Cooldown:**</strong> Foam roll quads, hamstrings, and glutes. Static stretches for hip flexors, hamstrings, and glutes (30 seconds each).
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Day 3 */}
+                          <div className="pt-4 space-y-2">
+                            <h4 className="text-sm sm:text-base font-bold text-amber-300 flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono text-xs">3</span>
+                              **Day 3: HIIT Cardio & Core**
+                            </h4>
+                            <div className="pl-4 sm:pl-8 space-y-1.5 text-slate-300">
+                              <p>
+                                <strong className="text-slate-100">* **Warm-up (5 mins):**</strong> Light cardio, like jogging or jumping jacks, followed by dynamic stretches.
+                              </p>
+                              <div>
+                                <strong className="text-slate-100">* **Main Workout:**</strong>
+                                <ul className="pl-6 space-y-1 mt-1 text-slate-300">
+                                  <li>* <strong className="text-white">**Burpees:**</strong> 3 sets of 10-15 reps</li>
+                                  <li>* <strong className="text-white">**Mountain Climbers:**</strong> 3 sets of 30-60 seconds</li>
+                                  <li>* <strong className="text-white">**Jump Squats:**</strong> 3 sets of 10-15 reps</li>
+                                  <li>* <strong className="text-white">**Kettlebell Swings:**</strong> 3 sets of 15-20 reps</li>
+                                  <li>* <strong className="text-white">**Plank variations:**</strong> (high plank, forearm plank, side plank): 30-60 seconds each, repeat 2-3 times</li>
+                                </ul>
+                              </div>
+                              <p>
+                                <strong className="text-slate-100">* **Cooldown:**</strong> Light cardio cool down (5 mins), static stretches for core and legs.
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Day 4 */}
+                          <div className="pt-4 space-y-2">
+                            <h4 className="text-sm sm:text-base font-bold text-emerald-300 flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs">4</span>
+                              **Day 4: Rest or Active Recovery**
+                            </h4>
+                            <div className="pl-4 sm:pl-8 space-y-1.5 text-slate-300">
+                              <p>
+                                <strong className="text-slate-100">* **Active Recovery:**</strong> Light activity like walking, swimming, yoga, or foam rolling. Focus on mobility and flexibility. This helps promote blood flow and reduces muscle soreness.
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Day 5 */}
+                          <div className="pt-4 space-y-2">
+                            <h4 className="text-sm sm:text-base font-bold text-amber-300 flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono text-xs">5</span>
+                              **Day 5: Upper Body Strength (Focus on different exercises)**
+                            </h4>
+                            <div className="pl-4 sm:pl-8 space-y-1.5 text-slate-300">
+                              <p>
+                                <strong className="text-slate-100">* **Warm-up (5 mins):**</strong> Similar to Day 1.
+                              </p>
+                              <div>
+                                <strong className="text-slate-100">* **Main Workout:**</strong>
+                                <ul className="pl-6 space-y-1 mt-1 text-slate-300">
+                                  <li>* <strong className="text-white">**Incline Dumbbell Press:**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**Chin-ups (or Close-Grip Lat Pulldowns):**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**Arnold Press:**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**T-Bar Rows:**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**Hammer Curls:**</strong> 3 sets of 10-15 reps</li>
+                                  <li>* <strong className="text-white">**Overhead Triceps Extensions:**</strong> 3 sets of 10-15 reps</li>
+                                </ul>
+                              </div>
+                              <p>
+                                <strong className="text-slate-100">* **Cooldown:**</strong> Similar to Day 1.
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Day 6 */}
+                          <div className="pt-4 space-y-2">
+                            <h4 className="text-sm sm:text-base font-bold text-amber-300 flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-mono text-xs">6</span>
+                              **Day 6: Lower Body & Core (Focus on different exercises)**
+                            </h4>
+                            <div className="pl-4 sm:pl-8 space-y-1.5 text-slate-300">
+                              <p>
+                                <strong className="text-slate-100">* **Warm-up (5 mins):**</strong> Similar to Day 2.
+                              </p>
+                              <div>
+                                <strong className="text-slate-100">* **Main Workout:**</strong>
+                                <ul className="pl-6 space-y-1 mt-1 text-slate-300">
+                                  <li>* <strong className="text-white">**Front Squats:**</strong> 3 sets of 8-12 reps</li>
+                                  <li>* <strong className="text-white">**Good Mornings:**</strong> 3 sets of 10-15 reps</li>
+                                  <li>* <strong className="text-white">**Bulgarian Split Squats:**</strong> 3 sets of 10-12 reps per leg</li>
+                                  <li>* <strong className="text-white">**Hip Thrusts:**</strong> 3 sets of 15-20 reps</li>
+                                  <li>* <strong className="text-white">**Cable Crunches:**</strong> 3 sets to failure</li>
+                                  <li>* <strong className="text-white">**Wood Chops (cable machine):**</strong> 3 sets of 15-20 reps per side</li>
+                                </ul>
+                              </div>
+                              <p>
+                                <strong className="text-slate-100">* **Cooldown:**</strong> Similar to Day 2.
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Day 7 */}
+                          <div className="pt-4 space-y-2">
+                            <h4 className="text-sm sm:text-base font-bold text-emerald-300 flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono text-xs">7</span>
+                              **Day 7: Rest or Active Recovery**
+                            </h4>
+                            <div className="pl-4 sm:pl-8 space-y-1.5 text-slate-300">
+                              <p>
+                                <strong className="text-slate-100">* **Active Recovery:**</strong> Similar to Day 4. Prioritize getting enough sleep this day to prepare for the next week of training.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Important Notes Callout matching Screenshot #3 */}
+                        <div className="p-5 rounded-xl bg-slate-950/80 border border-slate-700/80 space-y-3">
+                          <h4 className="text-sm font-bold text-orange-400 uppercase tracking-wider flex items-center gap-2">
+                            <Sparkles className="w-4 h-4" />
+                            **Important Notes:**
+                          </h4>
+                          <ul className="space-y-2 text-slate-300 text-xs sm:text-sm pl-2">
+                            <li>
+                              * <strong className="text-white">**Progressive Overload:**</strong> Gradually increase the weight, reps, or sets each week to challenge your muscles and promote continued growth.
+                            </li>
+                            <li>
+                              * <strong className="text-white">**Proper Form:**</strong> Focus on maintaining correct form throughout each exercise to prevent injury and maximize results. Watch videos and, if possible, consult with a trainer to ensure proper technique.
+                            </li>
+                            <li>
+                              * <strong className="text-white">**Listen to your Body:**</strong> Rest when needed and don't push through pain. Adjust the plan as needed based on your recovery and progress.
+                            </li>
+                            <li>
+                              * <strong className="text-white">**Nutrition:**</strong> Fuel your body with a balanced diet rich in protein, complex carbohydrates, and healthy fats to support muscle growth and recovery.
+                            </li>
+                            <li>
+                              * <strong className="text-white">**Hydration:**</strong> Drink plenty of water throughout the day, especially before, during, and after workouts.
+                            </li>
+                          </ul>
+                        </div>
+
+                        {/* Concluding Note */}
+                        <p className="text-xs text-slate-400 italic pt-2 border-t border-slate-800">
+                          This plan is a starting point. You can adjust it based on your progress and preferences. Remember consistency and proper execution are key to achieving your fitness goals. Good luck!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* VIEW MODE 2: INTERACTIVE TRAINING BOARD */
+                <div className="space-y-4">
                 {/* Parse adaptation note if present */}
                 {activePlan.includes('[Adaptation Note:') && (
                   <div className="p-4 rounded-xl bg-gradient-to-r from-orange-950/40 to-amber-950/30 border border-orange-500/40 text-orange-300 text-xs sm:text-sm leading-relaxed flex items-start gap-3">
@@ -1048,7 +1578,9 @@ ${activePlan}
                 {/* Day-by-Day Structured Cards */}
                 <div className="grid grid-cols-1 gap-4">
                   {(() => {
-                    const rawDays = activePlan.split(/(?=DAY\s+\d+:)/i).filter((d) => /DAY\s+\d+:/i.test(d));
+                    const rawDays = activePlan
+                      .split(/(?=(?:DAY|\*\*Day)\s+\d+[:*])/i)
+                      .filter((d) => /(?:DAY|\*\*Day)\s+\d+[:*]/i.test(d));
 
                     if (rawDays.length === 0) {
                       return (
@@ -1067,7 +1599,7 @@ ${activePlan}
 
                         const lines = dayText.trim().split('\n');
                         const titleLine = lines[0] || `DAY ${dayNumber}`;
-                        const cleanTitle = titleLine.replace(/^#+\s*/, '').trim();
+                        const cleanTitle = titleLine.replace(/^#+\s*/, '').replace(/\*\*/g, '').trim();
 
                         let focus = '';
                         let warmup = '';
@@ -1077,22 +1609,29 @@ ${activePlan}
 
                         lines.slice(1).forEach((line) => {
                           const trimmed = line.trim();
-                          if (trimmed.startsWith('• Focus:')) {
-                            focus = trimmed.replace('• Focus:', '').trim();
-                          } else if (trimmed.startsWith('• Warm-up:')) {
-                            warmup = trimmed.replace('• Warm-up:', '').trim();
-                          } else if (trimmed.startsWith('• Cooldown:')) {
-                            cooldown = trimmed.replace('• Cooldown:', '').trim();
-                          } else if (trimmed.startsWith('• Recovery Suggestion:') || trimmed.startsWith('• Recovery:')) {
-                            recovery = trimmed.replace(/•\s*Recovery(\s*Suggestion)?:/, '').trim();
+                          const lower = trimmed.toLowerCase();
+
+                          if (lower.startsWith('* **warm-up') || lower.startsWith('• warm-up') || lower.startsWith('**warm-up')) {
+                            warmup = trimmed.replace(/^[\*\•\-\s]*\**Warm-up(\s*\([^)]*\))?:\**/i, '').trim();
+                          } else if (lower.startsWith('* **cooldown') || lower.startsWith('• cooldown') || lower.startsWith('**cooldown')) {
+                            cooldown = trimmed.replace(/^[\*\•\-\s]*\**Cool-?down:\**/i, '').trim();
+                          } else if (lower.startsWith('* **active recovery') || lower.startsWith('• active recovery') || lower.startsWith('• recovery')) {
+                            recovery = trimmed.replace(/^[\*\•\-\s]*\**(\s*Active\s*)?Recovery(\s*Suggestion)?:\**/i, '').trim();
+                          } else if (/^[\*\•\-]\s+\*\*([^*]+)\*\*:\s*(.*)/.test(trimmed)) {
+                            const match = trimmed.match(/^[\*\•\-]\s+\*\*([^*]+)\*\*:\s*(.*)/);
+                            if (match && !lower.includes('warm-up') && !lower.includes('cooldown') && !lower.includes('recovery') && !lower.includes('main workout')) {
+                              exercises.push(`${match[1].trim()} | ${match[2].trim()}`);
+                            }
                           } else if (/^\d+\.\s+/.test(trimmed)) {
                             exercises.push(trimmed.replace(/^\d+\.\s+/, '').trim());
+                          } else if (trimmed.startsWith('• Focus:')) {
+                            focus = trimmed.replace('• Focus:', '').trim();
                           } else if (trimmed.startsWith('•') && !focus && !warmup) {
                             focus = trimmed.replace('•', '').trim();
                           }
                         });
 
-                        const isRestDay = cleanTitle.toLowerCase().includes('rest') || focus.toLowerCase().includes('rest');
+                        const isRestDay = cleanTitle.toLowerCase().includes('rest') || focus.toLowerCase().includes('rest') || recovery.length > 0;
 
                         return (
                           <div
@@ -1239,6 +1778,19 @@ ${activePlan}
                                                 {d}
                                               </span>
                                             ))}
+                                            <button
+                                              type="button"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                setActiveCoachExercise(exName);
+                                                setInnovativeDeckTab('coach');
+                                                window.scrollTo({ top: 400, behavior: 'smooth' });
+                                              }}
+                                              className="px-2.5 py-1 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 border border-orange-500/30 text-[11px] font-mono font-semibold transition-colors flex items-center gap-1 shrink-0 ml-auto"
+                                              title="Send to Live Audio Workout Coach"
+                                            >
+                                              <Volume2 className="w-3 h-3" /> Coach
+                                            </button>
                                           </div>
                                         )}
                                       </div>
@@ -1272,12 +1824,13 @@ ${activePlan}
                               </div>
                             )}
                           </div>
-                        );
-                      });
-                  })()}
-                </div>
-              </div>
+                    );
+                  });
+              })()}
             </div>
+          </div>
+        )}
+      </div>
 
             {/* Share Your Feedback Card matching Screenshot #14 & #15 */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl space-y-4">
